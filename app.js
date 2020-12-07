@@ -13,7 +13,36 @@ const employee = require("./lib/Employee");
 
 const team = []
 
-const questions = [
+const managerQuestions = [
+    {
+        type: 'input',
+        message: 'Please enter your name.',
+        name: 'name'
+    },
+    {
+        type: 'input',
+        message: 'Please enter your ID.',
+        name: 'id'
+    },
+    {
+        type: 'input',
+        message: 'Please enter your email.',
+        name: 'email'
+    },
+    {
+        type: 'input',
+        message: 'Please enter your Manager Office Number.',
+        name: 'officeNumber'
+    },
+    {
+        type: 'list',
+        message: 'Would you like to add employees?',
+        choices: ['Yes', 'No'],
+        name: 'continue'
+    }
+]
+
+const employeeQuestions = [
     {
         type: 'input',
         message: 'Enter employee name',
