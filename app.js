@@ -107,20 +107,22 @@ const employeeQuestions = [
 const createTeam = () => {
     inquirer
     .prompt(employeeQuestions)
-    .then((employeeInfo) => {
-        if (employeeInfo.role == 'Manager') {
-            let addEmployee = new Manager(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.officeNumber)
+    .then((member) => {
+        if (member.role == 'Manager') {
+            let addEmployee = new Manager(member.name, member.id, member.email, member.officeNumber)
+            roster.push(addEmployee);
         }
-        else if (employeeInfo.role == 'Engineer') {
-            let addEmployee = new Engineer(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.github)
+        else if (member.role == 'Engineer') {
+            let addEmployee = new Engineer(member.name, member.id, member.email, member.github)
+            roster.push(addEmployee);
         }
-        else if (employeeInfo.role == 'Intern') {
-            let addEmployee = new Intern(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.school)
+        else if (member.role == 'Intern') {
+            let addEmployee = new Intern(member.name, member.id, member.email, member.school)
+            roster.push(addEmployee);
         }
 
-        roster.push(addEmployee);
 
-        if (employeeInfo.continue == 'Yes') {
+        if (member.continue == 'Yes') {
             console.log('New employee added. Please fill prompt for the next.')
         } else {
             createHTML();
@@ -129,16 +131,31 @@ const createTeam = () => {
 }
 
 const createHTML = () => {
+    // We want a variable newHTML so read and copy our template for the main HTML.
+    const newHTML = fs.readFileSync('./templates/main.html')
+    fs.writeFileSync('./output/team.html', newHTML, err => err ? console.error(err): console.log('HTML Base Page is written.'))
 
+    // THEN FOR the members of the team that we have inputed to the roster array, we WANT to CREATE cards for each of them.
+    for (members of team) {
+        if (member.role == 'Manager') {
+            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getOfficeNumber())
+        }
+        if (member.role == 'Engineer') {
+            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getGithub())
+        }
+        if (member.role == 'Intern') {
+            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getSchool())
+        }
+    }
 }
 
 const init = () => {
     inquirer
     .prompt(managerQuestions)
-    .then((employeeInfo) => {
-        const manager = new Manager(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.officeNumber)
+    .then((member) => {
+        const manager = new Manager(member.name, member.id, member.email, member.officeNumber)
         roster.push(manager);
-        if (employeeInfo.continue == 'Yes') {
+        if (member.continue == 'Yes') {
             createTeam()
         } else {
             createHTML();
