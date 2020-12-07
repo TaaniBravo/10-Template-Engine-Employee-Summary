@@ -11,8 +11,9 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const employee = require("./lib/Employee");
 
-const team = []
+const roster = []
 
+// Manager Question sign in so it replicates an authentic admin verified system.
 const managerQuestions = [
     {
         type: 'input',
@@ -35,6 +36,7 @@ const managerQuestions = [
         name: 'officeNumber'
     },
     {
+        // Once they verify their info they can employees to their roster or they stop the program.
         type: 'list',
         message: 'Would you like to add employees?',
         choices: ['Yes', 'No'],
@@ -50,7 +52,7 @@ const employeeQuestions = [
     },
     {
         type: 'input',
-        message: 'What is their ID?',
+        message: 'Create their ID.',
         name: 'id'
     },
     {
@@ -61,10 +63,20 @@ const employeeQuestions = [
     {
         type: 'list',
         message: 'What is their role?',
-        choices: ['Engineer', 'Intern'],
+        choices: ['Manager', 'Engineer', 'Intern'],
         name: 'role'
     },
     {
+        // WHEN the member's role is a manager then the office number question is asked.
+        when: member => {
+            return member.role == 'Manager'
+        },
+        type: 'input',
+        message: 'What is their Office Number?',
+        name: 'officeNumber'
+    },
+    {
+        // WHEN the member's role is a engineer then the office number question is asked.
         when: member => {
             return member.role == 'Engineer'
         },
@@ -73,6 +85,7 @@ const employeeQuestions = [
         name: 'github'
     },
     {
+        // WHEN the member's role is a intern then the office number question is asked.
         when: member => {
             return member.role == 'Intern'
         },
@@ -81,6 +94,7 @@ const employeeQuestions = [
         name: 'school'
     },
     {
+        // If the user decides that they want to continue adding employees to their roster than they can.
         type: 'list',
         message: 'Do you wish to add another member?',
         choices: ['Yes', 'No'],
@@ -90,16 +104,47 @@ const employeeQuestions = [
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const createTeam = (member) => {
+const createTeam = () => {
     inquirer
     .prompt(employeeQuestions)
-    .then(() => {})
+    .then((employeeInfo) => {
+        if (employeeInfo.role == 'Manager') {
+            let addEmployee = new Manager(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.officeNumber)
+        }
+        else if (employeeInfo.role == 'Engineer') {
+            let addEmployee = new Engineer(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.github)
+        }
+        else if (employeeInfo.role == 'Intern') {
+            let addEmployee = new Intern(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.school)
+        }
+
+        roster.push(addEmployee);
+
+        if (employeeInfo.continue == 'Yes') {
+            console.log('New employee added. Please fill prompt for the next.')
+        } else {
+            createHTML();
+        }
+    })
+}
+
+const createHTML = () => {
+
 }
 
 const init = () => {
     inquirer
     .prompt(managerQuestions)
-    .then(() => {})
+    .then((employeeInfo) => {
+        const manager = new Manager(employeeInfo.name, employeeInfo.id, employeeInfo.email, employeeInfo.officeNumber)
+        roster.push(manager);
+        if (employeeInfo.continue == 'Yes') {
+            createTeam()
+        } else {
+            createHTML();
+        }
+    })
+
 }
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -111,7 +156,6 @@ const init = () => {
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-fs.writeFileSync(',/output/team.html', team, err => err ? console.error(err) : console.log('yo'))
 
 // HINT: each employee type (manager, engineer, or intern) has slightly different
 // information; write your code to ask different questions via inquirer depending on
