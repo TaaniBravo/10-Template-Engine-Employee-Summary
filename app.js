@@ -20,9 +20,9 @@ const questions = [
         name: 'name'
     },
     {
-        type: 'list',
-        message: 'What is their role?',
-        name: ['Manager', 'Engineer', 'Intern']
+        type: 'input',
+        message: 'What is their ID?',
+        name: 'id'
     },
     {
         type: 'input',
@@ -30,10 +30,33 @@ const questions = [
         name: 'email'
     },
     {
-        type: 'input',
-        message: 'What is their ID?',
-        name: 'id'
+        type: 'list',
+        message: 'What is their role?',
+        choices: ['Engineer', 'Intern'],
+        name: 'role'
     },
+    {
+        when: member => {
+            return member.role == 'Engineer'
+        },
+        type: 'input',
+        message: 'What is their GitHub username?',
+        name: 'github'
+    },
+    {
+        when: member => {
+            return member.role == 'Intern'
+        },
+        type: 'input',
+        message: 'What school do they attend?',
+        name: 'school'
+    },
+    {
+        type: 'list',
+        message: 'Do you wish to add another member?',
+        choices: ['Yes', 'No'],
+        name: 'continue'
+    }
 ]
 
 // Write code to use inquirer to gather information about the development team members,
