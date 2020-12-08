@@ -69,7 +69,7 @@ const employeeQuestions = [
     {
         // WHEN the member's role is a manager then the office number question is asked.
         when: member => {
-            return member.role == 'Manager'
+            return member.role === 'Manager'
         },
         type: 'input',
         message: 'What is their Office Number?',
@@ -78,7 +78,7 @@ const employeeQuestions = [
     {
         // WHEN the member's role is a engineer then the office number question is asked.
         when: member => {
-            return member.role == 'Engineer'
+            return member.role === 'Engineer'
         },
         type: 'input',
         message: 'What is their GitHub username?',
@@ -102,8 +102,6 @@ const employeeQuestions = [
     }
 ]
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
 const createTeam = () => {
     inquirer
     .prompt(employeeQuestions)
@@ -123,7 +121,6 @@ const createTeam = () => {
 
 
         if (member.continue == 'Yes') {
-            console.log('New employee added. Please fill prompt for the next.')
             createTeam();
         } else {
             createHTML();
@@ -133,26 +130,7 @@ const createTeam = () => {
 
 const createHTML = () => {
     // We want a variable newHTML so read and copy our template for the main HTML.
-    const newHTML = fs.readFileSync('./templates/main.html')
-    fs.writeFileSync(outputPath, newHTML, err => err ? console.error(err): console.log('HTML Base Page is written.'))
-
-    // THEN FOR the members of the team that we have inputed to the roster array, we WANT to CREATE cards for each of them.
-    for (member of roster) {
-        if (member.role == 'Manager') {
-            render(member)
-        }
-        if (member.role == 'Engineer') {
-            render(member)
-        }
-        if (member.role == 'Intern') {
-            render(member)
-        }
-    }
-}
-
-const createTeamCards = (name, id, email, role, roleSpecific) => {
-    let newCard = fs.readFileSync(`./templates/${role}.html`)
-
+    fs.writeFileSync(outputPath, render(roster), err => err ? console.error(err): console.log('HTML Page is written.'))
 }
 
 const init = () => {
@@ -169,24 +147,5 @@ const init = () => {
     })
 
 }
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
 
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
 init();
