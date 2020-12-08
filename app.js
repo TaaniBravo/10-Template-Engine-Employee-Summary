@@ -124,6 +124,7 @@ const createTeam = () => {
 
         if (member.continue == 'Yes') {
             console.log('New employee added. Please fill prompt for the next.')
+            createTeam();
         } else {
             createHTML();
         }
@@ -133,20 +134,25 @@ const createTeam = () => {
 const createHTML = () => {
     // We want a variable newHTML so read and copy our template for the main HTML.
     const newHTML = fs.readFileSync('./templates/main.html')
-    fs.writeFileSync('./output/team.html', newHTML, err => err ? console.error(err): console.log('HTML Base Page is written.'))
+    fs.writeFileSync(outputPath, newHTML, err => err ? console.error(err): console.log('HTML Base Page is written.'))
 
     // THEN FOR the members of the team that we have inputed to the roster array, we WANT to CREATE cards for each of them.
-    for (members of team) {
+    for (member of roster) {
         if (member.role == 'Manager') {
-            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getOfficeNumber())
+            render(member)
         }
         if (member.role == 'Engineer') {
-            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getGithub())
+            render(member)
         }
         if (member.role == 'Intern') {
-            createTeamCards(member.name, member.id, member.email, Manager.getRole(), Manager.getSchool())
+            render(member)
         }
     }
+}
+
+const createTeamCards = (name, id, email, role, roleSpecific) => {
+    let newCard = fs.readFileSync(`./templates/${role}.html`)
+
 }
 
 const init = () => {
