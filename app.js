@@ -10,6 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 const employee = require("./lib/Employee");
+const { doesNotMatch } = require("assert");
 
 const roster = []
 
@@ -104,55 +105,55 @@ const employeeQuestions = [
 
 const createTeam = () => {
     inquirer
-    .prompt(employeeQuestions)
-    .then((member) => {
-        // IF the member's role is a Manager...
-        if (member.role == 'Manager') {
-            // We WANT to 'addEmployee to the roster under the class Manager.
-            let addEmployee = new Manager(member.name, member.id, member.email, member.officeNumber)
-            roster.push(addEmployee);
-        }
-        else if (member.role == 'Engineer') {
-            // We WANT to 'addEmployee to the roster under the class Engineer.
-            let addEmployee = new Engineer(member.name, member.id, member.email, member.github)
-            roster.push(addEmployee);
-        }
-        else if (member.role == 'Intern') {
-            // We WANT to 'addEmployee to the roster under the class Intern.
-            let addEmployee = new Intern(member.name, member.id, member.email, member.school)
-            roster.push(addEmployee);
-        }
+        .prompt(employeeQuestions)
+        .then((member) => {
+            // IF the member's role is a Manager...
+            if (member.role == 'Manager') {
+                // We WANT to 'addEmployee to the roster under the class Manager.
+                let addEmployee = new Manager(member.name, member.id, member.email, member.officeNumber)
+                roster.push(addEmployee);
+            }
+            else if (member.role == 'Engineer') {
+                // We WANT to 'addEmployee to the roster under the class Engineer.
+                let addEmployee = new Engineer(member.name, member.id, member.email, member.github)
+                roster.push(addEmployee);
+            }
+            else if (member.role == 'Intern') {
+                // We WANT to 'addEmployee to the roster under the class Intern.
+                let addEmployee = new Intern(member.name, member.id, member.email, member.school)
+                roster.push(addEmployee);
+            }
 
 
-        if (member.continue == 'Yes') {
-            createTeam();
-            console.log(' ')
-        } else {
-            createHTML();
-            console.log('Team page was created. Please check team.html to view your page.')
-        }
-    })
+            if (member.continue == 'Yes') {
+                createTeam();
+                console.log(' ')
+            } else {
+                createHTML();
+                console.log('Team page was created. Please check team.html to view your page.')
+            }
+        })
 }
 
 const createHTML = () => {
     // This function is writing the file team.html once everything is push to the roster array.
-    fs.writeFileSync(outputPath, render(roster), err => err ? console.error(err): console.log('HTML Page is written.'))
+    fs.writeFileSync(outputPath, render(roster), err => err ? console.error(err) : console.log('HTML Page is written.'))
 }
 
 const init = () => {
     inquirer
-    .prompt(managerQuestions)
-    .then((member) => {
-        const manager = new Manager(member.name, member.id, member.email, member.officeNumber)
-        roster.push(manager);
-        if (member.continue == 'Yes') {
-            createTeam()
-            console.log(' ')
-        } else {
-            createHTML();
-            console.log('Team page was created. Please check team.html to view your page.')
-        }
-    })
+        .prompt(managerQuestions)
+        .then((member) => {
+            const manager = new Manager(member.name, member.id, member.email, member.officeNumber)
+            roster.push(manager);
+            if (member.continue == 'Yes') {
+                createTeam()
+                console.log(' ')
+            } else {
+                createHTML();
+                console.log('Team page was created. Please check team.html to view your page.')
+            }
+        })
 
 }
 

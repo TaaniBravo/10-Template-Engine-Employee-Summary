@@ -29,6 +29,10 @@ To install this project.
 ## Usage
 This program is great for making quick HTML pages for you, your team, and their information.
 
+![Example](./samples/samplePhoto.png)
+
+[Video Link](https://youtu.be/J7W_PHpAkog)
+
 ## Credits
 Cory Keelan (Classmate/Collaborator) - Cory and I shared a lot of ideas to make this homework as smooth as possible. Working with him was a pleasure.
 
