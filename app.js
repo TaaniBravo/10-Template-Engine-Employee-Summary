@@ -10,8 +10,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 const employee = require("./lib/Employee");
-const { doesNotMatch } = require("assert");
 
+// Empty array in which we are going to append our employee roster.
 const roster = []
 
 // Manager Question sign in so it replicates an authentic admin verified system.
@@ -103,6 +103,7 @@ const employeeQuestions = [
     }
 ]
 
+// If the manager decides to add employees to their roster than they are prompted with the createTeam function which prompts employeeQuestions and then matches the type of employee with their role.
 const createTeam = () => {
     inquirer
         .prompt(employeeQuestions)
@@ -113,11 +114,13 @@ const createTeam = () => {
                 let addEmployee = new Manager(member.name, member.id, member.email, member.officeNumber)
                 roster.push(addEmployee);
             }
+            // IF the member's role is a Engineer...
             else if (member.role == 'Engineer') {
                 // We WANT to 'addEmployee to the roster under the class Engineer.
                 let addEmployee = new Engineer(member.name, member.id, member.email, member.github)
                 roster.push(addEmployee);
             }
+            // IF the member's role is a Intern...
             else if (member.role == 'Intern') {
                 // We WANT to 'addEmployee to the roster under the class Intern.
                 let addEmployee = new Intern(member.name, member.id, member.email, member.school)
@@ -126,8 +129,8 @@ const createTeam = () => {
 
 
             if (member.continue == 'Yes') {
-                createTeam();
                 console.log(' ')
+                createTeam();
             } else {
                 createHTML();
                 console.log('Team page was created. Please check team.html to view your page.')
@@ -135,11 +138,13 @@ const createTeam = () => {
         })
 }
 
+// Once the manager is done filling out their roster we WRITE the file to the team.html.
 const createHTML = () => {
     // This function is writing the file team.html once everything is push to the roster array.
     fs.writeFileSync(outputPath, render(roster), err => err ? console.error(err) : console.log('HTML Page is written.'))
 }
 
+// Upon running program through node we start the init function which prompts manager questions.
 const init = () => {
     inquirer
         .prompt(managerQuestions)
